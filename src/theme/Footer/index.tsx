@@ -71,12 +71,12 @@ export default function Footer(): React.JSX.Element {
         marginTop: 'auto',
       }}
     >
-      {/* ── Top gradient line ── */}
+      {/* ── Top accent line ── */}
       <div
         style={{
           height: 2,
-          background: 'linear-gradient(90deg, #1d4ed8 0%, #3b82f6 40%, #8b5cf6 70%, #06b6d4 100%)',
-          opacity: 0.7,
+          background: '#3b82f6',
+          opacity: 0.8,
         }}
       />
 
@@ -113,10 +113,7 @@ export default function Footer(): React.JSX.Element {
                     fontSize: 16,
                     fontWeight: 800,
                     letterSpacing: '-0.02em',
-                    background: 'linear-gradient(135deg, #60a5fa 0%, #a78bfa 100%)',
-                    WebkitBackgroundClip: 'text',
-                    WebkitTextFillColor: 'transparent',
-                    backgroundClip: 'text',
+                    color: '#ffffff',
                   }}
                 >
                   SuperFast
