@@ -111,48 +111,8 @@ const config: Config = {
       ],
     },
 
-    footer: {
-      style: "dark",
-      logo: {
-        alt: "SuperFast Logo",
-        src: "img/logo.png",
-        width: 40,
-        height: 40,
-        style: { borderRadius: "10px" },
-      },
-      links: [
-        {
-          title: "Getting Started",
-          items: [
-            { label: "Introduction",        to: "/" },
-            { label: "Installation",        to: "/getting-started/installation" },
-            { label: "Quick Start",         to: "/getting-started/quick-start" },
-            { label: "System Requirements", to: "/getting-started/system-requirements" },
-          ],
-        },
-        {
-          title: "User Guide",
-          items: [
-            { label: "Dashboard",   to: "/user-guide/dashboard" },
-            { label: "Customers",   to: "/user-guide/customers" },
-            { label: "Suppliers",   to: "/user-guide/suppliers" },
-            { label: "WhatsApp",    to: "/user-guide/whatsapp" },
-            { label: "Reports",     to: "/user-guide/reports" },
-          ],
-        },
-        {
-          title: "Developer",
-          items: [
-            { label: "API Reference",   to: "/api/overview" },
-            { label: "Architecture",    to: "/developer/architecture" },
-            { label: "Local Setup",     to: "/developer/local-setup" },
-            { label: "Docker Deploy",   to: "/deployment/docker" },
-            { label: "GitHub",          href: "https://github.com/your-org/superfast" },
-          ],
-        },
-      ],
-      copyright: `© Copyright ${new Date().getFullYear()}, SuperFast. Built with Docusaurus.`,
-    },
+    // Footer is replaced by src/theme/Footer/index.tsx (custom enterprise component)
+    footer: undefined,
 
     prism: {
       theme: prismThemes.vsLight,
