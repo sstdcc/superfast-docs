@@ -1,0 +1,153 @@
+---
+id: multi-device
+title: Multiple Devices
+sidebar_label: Multiple Devices
+sidebar_position: 4
+---
+
+# Multiple Devices
+
+SuperFast supports any number of devices connected to a single store account. Each device has its own local SQLite database and syncs independently with the server.
+
+## How Multi-Device Works
+
+```
+Store Account (on Server)
+         │
+    ┌────┴────┐
+    │         │
+Device A   Device B   Device C ...
+(Phone 1)  (Tablet)   (Desktop)
+    │         │           │
+  Local     Local       Local
+  SQLite    SQLite      SQLite
+    │         │           │
+    └────┬────┘           │
+         │                │
+    ┌────▼────────────────▼───┐
+    │   PostgreSQL (Server)   │
+    └─────────────────────────┘
+```
+
+All devices share the same store data. Changes made on any device propagate to all others via push/pull sync.
+
+---
+
+## Adding a Second Device
+
+### If You Have the Store Credentials
+
+1. Install SuperFast on the new device ([Installation Guide](../getting-started/installation)).
+2. On first launch, tap **Log In to Existing Store**.
+3. Enter:
+   - **Store ID** — found in Settings → General on any connected device
+   - **PIN** — the 4-digit store PIN
+   - **Server URL** — same URL used on the first device
+4. Tap **Login**.
+
+The device registers with the server, receives a device-specific JWT, and downloads the full dataset from the server. This initial sync may take 5–30 seconds depending on data volume.
+
+### If You Don't Have the Credentials
+
+Ask any existing device owner to:
+1. Open **Settings → General**.
+2. Share the **Store ID**.
+3. Share the **PIN** (verbally — do not send the PIN over an insecure channel).
+
+---
+
+## Device IDs
+
+Each device is automatically assigned a unique `deviceId` (UUID) when it first registers with the server. The device ID is:
+- Stored locally in `%APPDATA%\superfast\device.json` (Windows) or in the app's private storage (Android)
+- Sent with every API request as the `X-Device-ID` header
+- Used by the server to track which changes came from which device (to avoid sending a device its own changes during pull)
+
+---
+
+## Viewing Connected Devices
+
+From any device:
+1. Open **Settings → Server Dashboard** tab.
+2. The **Connected Devices** section lists all registered devices with:
+   - Device ID (first 8 characters)
+   - Device Name
+   - Last Seen timestamp
+   - Status (Active / Inactive)
+
+---
+
+## Removing a Device
+
+To disconnect a specific device from the store:
+
+### From the Device Itself
+1. Open **Settings → Cloud Sync**.
+2. Tap **Disconnect**.
+
+### From Another Device (Remote)
+If the device is lost or you can't access it:
+1. Open **Settings → Server Dashboard**.
+2. Find the device in the Connected Devices list.
+3. Tap **Logout Device** (danger zone).
+4. The device's JWT is revoked server-side. It can no longer push or pull until it re-authenticates.
+
+---
+
+## Sync Behavior with Multiple Devices
+
+### Typical Flow
+
+```
+09:00  Device A creates customer "Khalid"      → pushed to server
+09:01  Device B pulls → receives customer "Khalid"
+09:05  Device B records debt for Khalid        → pushed to server
+09:06  Device A pulls → receives the debt transaction
+```
+
+### Simultaneous Offline Use
+
+```
+(Network is down)
+10:00  Device A records Khalid debt  → sync_queue (pending)
+10:02  Device B records Khalid payment → sync_queue (pending)
+
+(Network restored at 10:30)
+10:30  Device A pushes → server stores debt (ts=10:30:01)
+10:30  Device B pushes → server stores payment (ts=10:30:02)
+
+Both transactions are preserved (different UUIDs, no conflict)
+
+10:31  Device A pulls → gets Device B's payment
+10:31  Device B pulls → gets Device A's debt
+
+Result: Both devices now have both transactions.
+```
+
+---
+
+## Best Practices
+
+### Designate Roles
+Consider designating devices to specific roles:
+- **Counter device** — records all transactions throughout the day
+- **Manager device** — reviews reports, manages customers, approves credit
+
+### WhatsApp Device
+WhatsApp linking is per-device. Designate one device as the WhatsApp device to avoid confusion. Other devices can still trigger WhatsApp sends — the server routes all WhatsApp calls through the connected instance.
+
+### Keep One Device Online
+For reminders with WhatsApp auto-send, at least one device should remain online and running SuperFast. A dedicated Android phone or a desktop PC works well as the "always-on" device.
+
+### Sync Before Handing Off
+Before switching from one device to another for critical entry, tap **Sync Now** on both devices to ensure they are fully up to date.
+
+---
+
+## Device Limits
+
+There is no hard device limit per store in the software. Practical limits depend on:
+- Server capacity (RAM, DB connections)
+- Network bandwidth
+
+For most small stores, 2–5 devices is typical. The server configuration allows up to **100 concurrent connections** by default.

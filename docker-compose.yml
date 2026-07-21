@@ -1,0 +1,15 @@
+version: "3.8"
+
+services:
+  superfast-docs:
+    build: .
+    container_name: superfast-docs
+    restart: unless-stopped
+    ports:
+      - "3001:80"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.docs.rule=Host(`docs.yourdomain.com`)"
+      - "traefik.http.routers.docs.entrypoints=websecure"
+      - "traefik.http.routers.docs.tls.certresolver=myresolver"
+      - "traefik.http.services.docs.loadbalancer.server.port=80"
