@@ -1,0 +1,93 @@
+---
+id: introduction
+title: Introduction
+sidebar_label: Introduction
+sidebar_position: 1
+slug: /
+---
+
+import Mermaid from '@site/src/components/Mermaid';
+
+# Introduction to SuperFast
+
+**SuperFast** is a comprehensive supermarket debt and supplier management system built for small to medium retail businesses. It gives store owners a single place to track what customers owe, what is owed to suppliers, and a full transaction history — all accessible offline and synced to the cloud when a connection is available.
+
+## Key Features
+
+| Feature | Description |
+|---|---|
+| Customer Debt Tracking | Record debts and payments for each customer with full history |
+| Supplier Purchase Tracking | Track purchases from suppliers and payments made to them |
+| WhatsApp Statements | Send account statements and custom messages via WhatsApp |
+| Offline-First | Fully functional with no internet; syncs automatically when online |
+| Multi-Device Sync | One store account works across multiple phones/tablets |
+| Auto Reminders | Schedule debt reminders with optional WhatsApp delivery |
+| Reports & Analytics | Cash flow, balance rankings, trends, and charts |
+| Dark Mode | Full dark theme matching modern OLED displays |
+| Arabic + English UI | Switch between Arabic (RTL) and English at any time |
+
+## Who Is It For?
+
+SuperFast is designed for:
+
+- **Small supermarket and corner shop owners** who track customer debts in a notebook today
+- **Wholesale suppliers** who extend credit to retail clients
+- **Multi-branch stores** that need several devices synchronized to a single cloud account
+
+## Platform Support
+
+SuperFast ships on three platforms from a single codebase:
+
+| Platform | Format | Technology |
+|---|---|---|
+| Windows / macOS / Linux | Desktop app (.exe / .dmg / .AppImage) | Tauri + Next.js |
+| Android | APK / Play Store | Tauri Android |
+| Web (self-hosted) | Browser | Next.js static export |
+
+## System Overview
+
+<Mermaid chart={`
+flowchart TB
+    subgraph CLIENTS["CLIENT LAYER"]
+        direction LR
+        DESKTOP["Desktop App\nTauri + Next.js\nWindows / macOS / Linux"]
+        MOBILE["Android APK\nTauri Android"]
+        WEB["Web App\nNext.js"]
+    end
+
+    subgraph LOCAL["LOCAL  per device"]
+        DB[("SQLite Database\nfull offline read/write\n+ sync_queue")]
+    end
+
+    CLIENTS --> DB
+
+    DB -->|"HTTPS push/pull\nwhen online"| API
+
+    subgraph SERVER["SERVER LAYER"]
+        direction LR
+        API["Go / Gin REST API"]
+        PG[("PostgreSQL")]
+        REDIS["Redis"]
+        MINIO["MinIO S3"]
+        EVOLUTION["Evolution API\nWhatsApp"]
+        API --> PG & REDIS & MINIO & EVOLUTION
+    end
+`} />
+
+## Core Concepts
+
+### Store & Device Model
+A **Store** is the top-level account (e.g. "Ahmed's Supermarket"). Each physical device (phone, laptop) is a **Device** that belongs to a store. All devices share the same customers, suppliers, and transactions via cloud sync.
+
+### Customers vs Suppliers
+- **Customer** — a person or business that buys from you on credit. A positive balance means they owe you money. A negative balance means you over-collected (rare).
+- **Supplier** — a company you buy stock from on credit. A positive balance means you owe them money. A negative balance means you over-paid.
+
+### Sync Queue
+Every change made on a device (create/update/delete) is written to a local **sync queue**. When the device has network access, the queue is flushed to the server (push), and new changes from other devices are downloaded (pull). This ensures the app is always usable, even without internet.
+
+## Next Steps
+
+- [System Requirements](/getting-started/system-requirements) — Check hardware and software requirements
+- [Installation](/getting-started/installation) — Download and install SuperFast
+- [Quick Start](/getting-started/quick-start) — Get up and running in 5 minutes

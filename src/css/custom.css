@@ -238,62 +238,96 @@ div[class*="announcementBarClose"] {
   background: #0e0e0e;
 }
 
+.theme-doc-sidebar-menu {
+  padding: 12px 0 !important;
+}
+
 .menu {
-  padding: 16px 8px !important;
+  padding: 0 !important;
 }
 
-/* Category heading */
-.menu__list > .menu__list-item > .menu__list-item-collapsible > .menu__link {
-  font-size: 10.5px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.09em;
-  color: rgba(255,255,255,0.25);
-  padding: 4px 12px;
-  margin-top: 20px;
+/* ── Category group (top-level collapsible) ── */
+.menu__list-item--collapsed .menu__list-item-collapsible,
+.menu__list-item-collapsible {
   border-radius: 0;
-  cursor: default;
 }
 
-.menu__list > .menu__list-item > .menu__list-item-collapsible > .menu__link:hover {
-  background: transparent;
-  color: rgba(255,255,255,0.25);
-}
-
-/* Nav items */
-.menu__link {
-  border-radius: 5px;
-  padding: 6px 12px;
-  font-size: 13.5px;
-  font-weight: 400;
-  color: rgba(255,255,255,0.5);
-  transition: color 0.1s, background 0.1s;
-}
-
-.menu__link:hover:not(.menu__link--active) {
-  background: rgba(255,255,255,0.04);
-  color: rgba(255,255,255,0.8);
-}
-
-.menu__link--active {
-  background: rgba(59, 130, 246, 0.08) !important;
-  color: #fff !important;
-  font-weight: 600;
-  border-left: 2px solid #3b82f6;
-  padding-left: 10px;
+.menu__list-item-collapsible {
+  border-radius: 0 !important;
 }
 
 .menu__list-item-collapsible:hover {
   background: transparent !important;
 }
 
-.menu__caret::before {
-  border-color: rgba(255,255,255,0.2) transparent transparent;
+/* Category label */
+.menu__list-item-collapsible > .menu__link {
+  font-size: 10.5px !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.1em !important;
+  color: rgba(255,255,255,0.22) !important;
+  padding: 18px 16px 6px !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  cursor: default;
+  pointer-events: none;
 }
 
+/* Category caret — hide since category labels are not clickable */
+.menu__list-item-collapsible > .menu__caret {
+  display: none;
+}
+
+/* ── Page links ── */
+.menu__link {
+  border-radius: 5px !important;
+  padding: 5px 12px 5px 14px !important;
+  margin: 1px 6px !important;
+  font-size: 13.5px !important;
+  font-weight: 400 !important;
+  color: rgba(255,255,255,0.48) !important;
+  transition: color 0.1s, background 0.1s !important;
+  line-height: 1.5 !important;
+}
+
+.menu__link:hover:not(.menu__link--active) {
+  background: rgba(255,255,255,0.04) !important;
+  color: rgba(255,255,255,0.8) !important;
+  text-decoration: none !important;
+}
+
+/* Active page */
+.menu__link--active:not(.menu__list-item-collapsible > .menu__link) {
+  background: rgba(59, 130, 246, 0.09) !important;
+  color: #fff !important;
+  font-weight: 500 !important;
+  position: relative;
+}
+
+.menu__link--active:not(.menu__list-item-collapsible > .menu__link)::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 20%;
+  height: 60%;
+  width: 2px;
+  background: #3b82f6;
+  border-radius: 0 2px 2px 0;
+}
+
+/* Sub-list indent */
+.menu__list .menu__list {
+  padding-left: 8px !important;
+  border-left: 1px solid rgba(255,255,255,0.05);
+  margin-left: 20px;
+}
+
+/* Collapse toggle */
 .collapseSidebarButton {
   border-top: 1px solid rgba(255,255,255,0.06) !important;
   background: transparent !important;
+  color: rgba(255,255,255,0.3) !important;
 }
 
 /* ════════════════════════════════════════════════════════════════
@@ -519,6 +553,24 @@ td { padding: 10px 16px; }
 [data-theme="dark"] ::-webkit-scrollbar-track { background: transparent; }
 [data-theme="dark"] ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 99px; }
 [data-theme="dark"] ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.15); }
+
+/* ─── Mermaid diagrams ──────────────────────────────────────────── */
+.mermaid {
+  display: flex;
+  justify-content: center;
+  margin: 2rem 0;
+}
+
+[data-theme="dark"] .mermaid svg {
+  filter: none;
+}
+
+/* Override Mermaid node background in dark mode for better contrast */
+[data-theme="dark"] .mermaid .node rect,
+[data-theme="dark"] .mermaid .node circle,
+[data-theme="dark"] .mermaid .node polygon {
+  stroke-width: 1px;
+}
 
 /* ─── Mobile ────────────────────────────────────────────────────── */
 @media (max-width: 996px) {

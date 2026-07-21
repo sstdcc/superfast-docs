@@ -5,29 +5,26 @@ sidebar_label: Multiple Devices
 sidebar_position: 4
 ---
 
+import Mermaid from '@site/src/components/Mermaid';
+
 # Multiple Devices
 
 SuperFast supports any number of devices connected to a single store account. Each device has its own local SQLite database and syncs independently with the server.
 
 ## How Multi-Device Works
 
-```
-Store Account (on Server)
-         │
-    ┌────┴────┐
-    │         │
-Device A   Device B   Device C ...
-(Phone 1)  (Tablet)   (Desktop)
-    │         │           │
-  Local     Local       Local
-  SQLite    SQLite      SQLite
-    │         │           │
-    └────┬────┘           │
-         │                │
-    ┌────▼────────────────▼───┐
-    │   PostgreSQL (Server)   │
-    └─────────────────────────┘
-```
+<Mermaid chart={`
+flowchart TB
+    SERVER[("PostgreSQL\nStore Account")]
+
+    DA["Device A\nPhone 1\nLocal SQLite"]
+    DB["Device B\nTablet\nLocal SQLite"]
+    DC["Device C\nDesktop\nLocal SQLite"]
+
+    DA <-->|push / pull| SERVER
+    DB <-->|push / pull| SERVER
+    DC <-->|push / pull| SERVER
+`} />
 
 All devices share the same store data. Changes made on any device propagate to all others via push/pull sync.
 

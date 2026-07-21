@@ -5,27 +5,39 @@ sidebar_label: How Sync Works
 sidebar_position: 1
 ---
 
+import Mermaid from '@site/src/components/Mermaid';
+
 # How Sync Works
 
 SuperFast uses a **push/pull sync engine** built on top of a local SQLite database on each device and a central PostgreSQL database on the server. The architecture ensures the app is fully usable without internet while keeping all devices consistent when connectivity is available.
 
 ## Architecture Overview
 
-```
-Device A (Phone)                Server (Go API)           Device B (Tablet)
-─────────────────────           ─────────────────          ─────────────────────
-SQLite DB                       PostgreSQL DB              SQLite DB
-sync_queue (pending)            sync_log (all changes)     sync_queue (pending)
-     │                               ▲  │                        │
-     │ PUSH (POST /sync/push)        │  │ PUSH                   │
-     ├──────────────────────────────►│  │◄───────────────────────┤
-     │                               │  │                        │
-     │ PULL (GET /sync/pull?since=T) │  │ PULL                   │
-     │◄──────────────────────────────┘  └───────────────────────►│
-     │                               │                           │
-     ▼                               │                           ▼
-Local DB updated               Authoritative source      Local DB updated
-```
+<Mermaid chart={`
+sequenceDiagram
+    participant DA as Device A (Phone)
+    participant S as Server · Go API
+    participant PG as PostgreSQL
+    participant DB as Device B (Tablet)
+
+    Note over DA,DB: Both devices may be offline. Changes queue locally.
+
+    DA->>S: POST /sync/push (pending changes)
+    S->>PG: Apply to PostgreSQL + append to sync_log
+    S-->>DA: 200 OK — marked synced
+
+    DB->>S: POST /sync/push (pending changes)
+    S->>PG: Apply to PostgreSQL + append to sync_log
+    S-->>DB: 200 OK — marked synced
+
+    DA->>S: GET /sync/pull?since=T
+    S-->>DA: Changes from Device B since T
+    Note over DA: Apply in FK order → recalc balances
+
+    DB->>S: GET /sync/pull?since=T
+    S-->>DB: Changes from Device A since T
+    Note over DB: Apply in FK order → recalc balances
+`} />
 
 ---
 
