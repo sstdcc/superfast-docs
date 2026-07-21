@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from '@docusaurus/Link';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 
@@ -63,22 +63,52 @@ const SOCIAL = [
 export default function Footer(): React.JSX.Element {
   const { siteConfig } = useDocusaurusContext();
 
+  // SSR-safe theme detection: defaults to dark (our SSR default),
+  // then syncs to the actual html[data-theme] attribute on the client.
+  const [isDark, setIsDark] = useState(true);
+
+  useEffect(() => {
+    const read = () =>
+      setIsDark(document.documentElement.getAttribute('data-theme') !== 'light');
+    read();
+    const obs = new MutationObserver(read);
+    obs.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+    return () => obs.disconnect();
+  }, []);
+
+  // Theme-aware color palette
+  const c = {
+    bg:          isDark ? '#080808' : '#f9fafb',
+    border:      isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.08)',
+    heading:     isDark ? 'rgba(255,255,255,0.22)' : 'rgba(0,0,0,0.32)',
+    brand:       isDark ? '#ffffff' : '#111827',
+    desc:        isDark ? 'rgba(255,255,255,0.38)' : 'rgba(0,0,0,0.48)',
+    link:        isDark ? 'rgba(255,255,255,0.45)' : 'rgba(0,0,0,0.55)',
+    linkHover:   isDark ? 'rgba(255,255,255,0.85)' : 'rgba(0,0,0,0.88)',
+    iconBg:      isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.04)',
+    iconBorder:  isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.1)',
+    iconColor:   isDark ? 'rgba(255,255,255,0.5)' : 'rgba(0,0,0,0.5)',
+    iconBgHover: isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.08)',
+    iconHover:   isDark ? '#fff' : '#000',
+    divider:     isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.07)',
+    copy:        isDark ? 'rgba(255,255,255,0.25)' : 'rgba(0,0,0,0.35)',
+    dot:         isDark ? 'rgba(255,255,255,0.12)' : 'rgba(0,0,0,0.12)',
+    badge:       isDark ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.04)',
+    badgeBorder: isDark ? 'rgba(255,255,255,0.09)' : 'rgba(0,0,0,0.1)',
+    badgeColor:  isDark ? 'rgba(255,255,255,0.38)' : 'rgba(0,0,0,0.42)',
+    docusaurus:  isDark ? 'rgba(255,255,255,0.35)' : 'rgba(0,0,0,0.4)',
+  };
+
   return (
     <footer
       style={{
-        background: '#080808',
-        borderTop: '1px solid rgba(255,255,255,0.06)',
+        background: c.bg,
+        borderTop: `1px solid ${c.border}`,
         marginTop: 'auto',
       }}
     >
       {/* ── Top accent line ── */}
-      <div
-        style={{
-          height: 2,
-          background: '#3b82f6',
-          opacity: 0.8,
-        }}
-      />
+      <div style={{ height: 2, background: '#3b82f6', opacity: 0.8 }} />
 
       {/* ── Main footer body ── */}
       <div
@@ -105,20 +135,13 @@ export default function Footer(): React.JSX.Element {
                 alt="SuperFast"
                 width={38}
                 height={38}
-                style={{ borderRadius: 10, boxShadow: '0 2px 10px rgba(0,0,0,0.5)' }}
+                style={{ borderRadius: 10, boxShadow: '0 2px 10px rgba(0,0,0,0.2)' }}
               />
               <div>
-                <div
-                  style={{
-                    fontSize: 16,
-                    fontWeight: 800,
-                    letterSpacing: '-0.02em',
-                    color: '#ffffff',
-                  }}
-                >
+                <div style={{ fontSize: 16, fontWeight: 800, letterSpacing: '-0.02em', color: c.brand }}>
                   SuperFast
                 </div>
-                <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.3)', marginTop: 1, fontWeight: 500 }}>
+                <div style={{ fontSize: 11, color: c.desc, marginTop: 1, fontWeight: 500 }}>
                   v1.0.0 · Enterprise
                 </div>
               </div>
@@ -127,7 +150,7 @@ export default function Footer(): React.JSX.Element {
             <p
               style={{
                 fontSize: 13,
-                color: 'rgba(255,255,255,0.4)',
+                color: c.desc,
                 lineHeight: 1.7,
                 margin: 0,
                 marginBottom: 20,
@@ -182,21 +205,19 @@ export default function Footer(): React.JSX.Element {
                     width: 36,
                     height: 36,
                     borderRadius: 8,
-                    background: 'rgba(255,255,255,0.05)',
-                    border: '1px solid rgba(255,255,255,0.08)',
-                    color: 'rgba(255,255,255,0.5)',
+                    background: c.iconBg,
+                    border: `1px solid ${c.iconBorder}`,
+                    color: c.iconColor,
                     transition: 'all 0.15s ease',
                     textDecoration: 'none',
                   }}
                   onMouseEnter={(e) => {
-                    (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.1)';
-                    (e.currentTarget as HTMLElement).style.color = '#fff';
-                    (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.15)';
+                    (e.currentTarget as HTMLElement).style.background = c.iconBgHover;
+                    (e.currentTarget as HTMLElement).style.color = c.iconHover;
                   }}
                   onMouseLeave={(e) => {
-                    (e.currentTarget as HTMLElement).style.background = 'rgba(255,255,255,0.05)';
-                    (e.currentTarget as HTMLElement).style.color = 'rgba(255,255,255,0.5)';
-                    (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.08)';
+                    (e.currentTarget as HTMLElement).style.background = c.iconBg;
+                    (e.currentTarget as HTMLElement).style.color = c.iconColor;
                   }}
                 >
                   {s.icon}
@@ -210,11 +231,11 @@ export default function Footer(): React.JSX.Element {
             <div key={col.title}>
               <div
                 style={{
-                  fontSize: 11,
+                  fontSize: 10.5,
                   fontWeight: 700,
                   textTransform: 'uppercase',
-                  letterSpacing: '0.09em',
-                  color: 'rgba(255,255,255,0.25)',
+                  letterSpacing: '0.1em',
+                  color: c.heading,
                   marginBottom: 16,
                 }}
               >
@@ -227,16 +248,16 @@ export default function Footer(): React.JSX.Element {
                       to={link.to}
                       style={{
                         fontSize: 13.5,
-                        color: 'rgba(255,255,255,0.45)',
+                        color: c.link,
                         textDecoration: 'none',
                         transition: 'color 0.15s ease',
                         fontWeight: 400,
                       }}
                       onMouseEnter={(e) => {
-                        (e.currentTarget as HTMLElement).style.color = 'rgba(255,255,255,0.85)';
+                        (e.currentTarget as HTMLElement).style.color = c.linkHover;
                       }}
                       onMouseLeave={(e) => {
-                        (e.currentTarget as HTMLElement).style.color = 'rgba(255,255,255,0.45)';
+                        (e.currentTarget as HTMLElement).style.color = c.link;
                       }}
                     >
                       {link.label}
@@ -249,13 +270,7 @@ export default function Footer(): React.JSX.Element {
         </div>
 
         {/* ── Divider ── */}
-        <div
-          style={{
-            height: 1,
-            background: 'rgba(255,255,255,0.06)',
-            margin: '40px 0 28px',
-          }}
-        />
+        <div style={{ height: 1, background: c.divider, margin: '40px 0 28px' }} />
 
         {/* ── Bottom bar ── */}
         <div
@@ -268,23 +283,23 @@ export default function Footer(): React.JSX.Element {
           }}
         >
           {/* Left: copyright */}
-          <div style={{ fontSize: 12.5, color: 'rgba(255,255,255,0.25)', display: 'flex', alignItems: 'center', gap: 8 }}>
+          <div style={{ fontSize: 12.5, color: c.copy, display: 'flex', alignItems: 'center', gap: 8 }}>
             <span>© {YEAR} SuperFast.</span>
-            <span style={{ color: 'rgba(255,255,255,0.12)' }}>·</span>
+            <span style={{ color: c.dot }}>·</span>
             <span>
               Built with{' '}
               <a
                 href="https://docusaurus.io"
                 target="_blank"
                 rel="noreferrer"
-                style={{ color: 'rgba(255,255,255,0.35)', textDecoration: 'none' }}
+                style={{ color: c.docusaurus, textDecoration: 'none' }}
               >
                 Docusaurus
               </a>
             </span>
           </div>
 
-          {/* Center: version + platform badges */}
+          {/* Center: platform badges */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
             {['v1.0.0', 'Windows', 'Android', 'Self-hosted'].map((label) => (
               <span
@@ -294,9 +309,9 @@ export default function Footer(): React.JSX.Element {
                   fontWeight: 500,
                   padding: '3px 10px',
                   borderRadius: 4,
-                  background: 'rgba(255,255,255,0.04)',
-                  border: '1px solid rgba(255,255,255,0.09)',
-                  color: 'rgba(255,255,255,0.38)',
+                  background: c.badge,
+                  border: `1px solid ${c.badgeBorder}`,
+                  color: c.badgeColor,
                   letterSpacing: '0.02em',
                 }}
               >
@@ -312,12 +327,12 @@ export default function Footer(): React.JSX.Element {
                 key={label}
                 style={{
                   fontSize: 12.5,
-                  color: 'rgba(255,255,255,0.25)',
+                  color: c.copy,
                   cursor: 'pointer',
                   transition: 'color 0.15s',
                 }}
-                onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = 'rgba(255,255,255,0.55)'; }}
-                onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = 'rgba(255,255,255,0.25)'; }}
+                onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.color = c.linkHover; }}
+                onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.color = c.copy; }}
               >
                 {label}
               </span>
