@@ -286,25 +286,21 @@ export default function Footer(): React.JSX.Element {
 
           {/* Center: version + platform badges */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            {[
-              { label: 'v1.0.0', color: '#3b82f6' },
-              { label: 'Windows', color: '#6b7280' },
-              { label: 'Android', color: '#10b981' },
-              { label: 'Self-hosted', color: '#8b5cf6' },
-            ].map((badge) => (
+            {['v1.0.0', 'Windows', 'Android', 'Self-hosted'].map((label) => (
               <span
-                key={badge.label}
+                key={label}
                 style={{
                   fontSize: 11,
-                  fontWeight: 600,
+                  fontWeight: 500,
                   padding: '3px 10px',
-                  borderRadius: 99,
-                  background: `${badge.color}18`,
-                  border: `1px solid ${badge.color}30`,
-                  color: badge.color,
+                  borderRadius: 4,
+                  background: 'rgba(255,255,255,0.04)',
+                  border: '1px solid rgba(255,255,255,0.09)',
+                  color: 'rgba(255,255,255,0.38)',
+                  letterSpacing: '0.02em',
                 }}
               >
-                {badge.label}
+                {label}
               </span>
             ))}
           </div>
