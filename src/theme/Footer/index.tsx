@@ -131,7 +131,7 @@ export default function Footer(): React.JSX.Element {
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
               <img
-                src="/img/logo.png"
+                src={`${siteConfig.baseUrl}img/logo.png`}
                 alt="SuperFast"
                 width={38}
                 height={38}
