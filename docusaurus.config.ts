@@ -7,8 +7,8 @@ const config: Config = {
   tagline: "Supermarket Debt & Supplier Management System",
   favicon: "img/favicon.ico",
 
-  url: "https://docs.supersfast.com",
-  baseUrl: "/",
+  url: "https://docs.sstd.cc",
+  baseUrl: "/superfast/",
 
   onBrokenLinks: "warn",
   onBrokenMarkdownLinks: "warn",
@@ -26,7 +26,7 @@ const config: Config = {
           routeBasePath: "/",
           sidebarPath: "./sidebars.ts",
           showLastUpdateTime: true,
-          editUrl: "https://github.com/your-org/superfast/tree/main/docs/",
+          // editUrl removed — repository is private
         },
         blog: false,
         theme: {
@@ -51,11 +51,10 @@ const config: Config = {
   ],
 
   themeConfig: {
-    // Announcement bar at the top
     announcementBar: {
       id: "superfast_v1",
       content:
-        '🚀 <strong>SuperFast v1.0</strong> is live — <a href="/getting-started/quick-start" style="color:#93c5fd;font-weight:600">Get started in 5 minutes →</a>',
+        '🚀 <strong>SuperFast v1.0</strong> is live — <a href="/superfast/getting-started/quick-start" style="color:#93c5fd;font-weight:600">Get started in 5 minutes →</a>',
       backgroundColor: "#0f172a",
       textColor: "#e2e8f0",
       isCloseable: true,
@@ -103,15 +102,15 @@ const config: Config = {
           position: "right",
         },
         {
-          href: "https://github.com/your-org/superfast",
+          href: "https://www.sstd.cc",
           position: "right",
-          className: "header-github-link",
-          "aria-label": "GitHub repository",
+          className: "header-sstd-link",
+          "aria-label": "SSTD website",
         },
       ],
     },
 
-    // Footer is replaced by src/theme/Footer/index.tsx (custom enterprise component)
+    // Footer replaced by src/theme/Footer/index.tsx
     footer: undefined,
 
     prism: {

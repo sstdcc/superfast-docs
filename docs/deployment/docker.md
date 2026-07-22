@@ -130,7 +130,7 @@ services:
 
   # ─── SuperFast API Server ──────────────────────────────────────
   superfast-api:
-    image: ghcr.io/your-org/superfast-api:latest
+    image: ghcr.io/sstd/superfast-api:latest
     container_name: superfast-api
     restart: unless-stopped
     environment:
@@ -161,7 +161,7 @@ services:
 
   # ─── SuperFast Docs ────────────────────────────────────────────
   superfast-docs:
-    image: ghcr.io/your-org/superfast-docs:latest
+    image: ghcr.io/sstd/superfast-docs:latest
     container_name: superfast-docs
     restart: unless-stopped
     networks:
