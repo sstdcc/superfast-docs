@@ -3,8 +3,8 @@ import type { Config } from "@docusaurus/types";
 import type * as Preset from "@docusaurus/preset-classic";
 
 const config: Config = {
-  title: "SuperFast",
-  tagline: "Supermarket Debt & Supplier Management System",
+  title: "SuperFast by SSTD",
+  tagline: "Supermarket Debt & Supplier Management System — by SSTD",
   favicon: "img/favicon.ico",
 
   url: "https://docs.sstd.cc",
@@ -68,9 +68,24 @@ const config: Config = {
 
     image: "img/logo-128.png",
 
+    metadata: [
+      {
+        name: "description",
+        content:
+          "Official documentation for SuperFast — supermarket debt & supplier management system, a product of SSTD.",
+      },
+      { property: "og:site_name", content: "SuperFast by SSTD" },
+      {
+        property: "og:description",
+        content:
+          "Official documentation for SuperFast — supermarket debt & supplier management system, a product of SSTD.",
+      },
+    ],
+
     navbar: {
       title: "SuperFast",
       style: "dark",
+      // "by SSTD" subtitle injected via CSS ::after on .navbar__title
       logo: {
         alt: "SuperFast Logo",
         src: "img/logo.png",

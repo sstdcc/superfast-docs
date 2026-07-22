@@ -82,29 +82,32 @@ body {
   height: 30px;
 }
 
-/* Clean white title */
+/* Title: two lines — "SuperFast" + "by SSTD" */
 .navbar__title {
   font-size: 15px;
   font-weight: 700;
   color: #ffffff !important;
   letter-spacing: -0.01em;
+  line-height: 1.15;
+  display: flex !important;
+  flex-direction: column;
+  align-items: flex-start;
+  white-space: normal !important;
+  overflow: visible !important;
 }
 
-/* "DOCS" badge */
+/* "by SSTD" subtitle line */
 .navbar__title::after {
-  content: "DOCS";
-  display: inline-block;
-  font-size: 9px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  padding: 2px 5px;
-  border-radius: 3px;
-  background: rgba(59, 130, 246, 0.12);
-  border: 1px solid rgba(59, 130, 246, 0.22);
-  color: #3b82f6;
-  margin-left: 7px;
-  vertical-align: middle;
-  line-height: 1.5;
+  content: "by SSTD";
+  display: block;
+  font-size: 10px;
+  font-weight: 500;
+  color: rgba(255,255,255,0.38);
+  letter-spacing: 0.04em;
+  line-height: 1;
+  margin-top: 2px;
+  font-style: normal;
+  text-transform: none;
 }
 
 /* Nav links */
