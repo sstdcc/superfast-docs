@@ -15,7 +15,7 @@ const config: Config = {
 
   i18n: {
     defaultLocale: "en",
-    locales: ["en", "ar"],
+    locales: ["en"],
   },
 
   presets: [
@@ -41,7 +41,7 @@ const config: Config = {
       "@easyops-cn/docusaurus-search-local",
       {
         hashed: true,
-        language: ["en", "ar"],
+        language: ["en"],
         indexBlog: false,
         docsRouteBasePath: "/",
         highlightSearchTermsOnTargetPage: true,
@@ -113,8 +113,10 @@ const config: Config = {
           position: "left",
         },
         {
-          type: "localeDropdown",
+          href: "https://github.com/sstdcc/superfast",
           position: "right",
+          className: "header-github-link",
+          "aria-label": "GitHub repository",
         },
         {
           href: "https://www.sstd.cc",
