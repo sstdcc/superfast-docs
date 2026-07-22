@@ -1,0 +1,6 @@
+{
+  "rewrites": [
+    { "source": "/superfast/:path*", "destination": "/:path*" },
+    { "source": "/superfast", "destination": "/" }
+  ]
+}
